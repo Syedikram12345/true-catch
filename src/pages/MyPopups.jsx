@@ -40,12 +40,13 @@ function MyPopups() {
       });
       setPopups(popups.filter((popup) => popup.id !== id));
     } catch (err) {
-      alert("Failed to delete popup.");
+      alert("Failed to delete popup.", err);
     }
   }
 
   function getEmbedCode(popupId) {
-    return `<script src="http://localhost:5000/embed.js" data-popup-id="${popupId}"></script>`;
+    const apiBase = import.meta.env.VITE_API_URL.replace("/api", "");
+    return `<script src="${apiBase}/embed.js" data-popup-id="${popupId}"></script>`;
   }
 
   function handleCopy(popupId) {
