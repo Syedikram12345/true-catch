@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import CreatePopup from "./pages/CreatePopup";
 import MyPopups from "./pages/MyPopups";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Contacts from "./pages/Contacts";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <MyPopups />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/contacts",
+    element: (
+      <ProtectedRoute>
+        <Contacts />
       </ProtectedRoute>
     ),
   },
