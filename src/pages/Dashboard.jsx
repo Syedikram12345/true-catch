@@ -66,6 +66,13 @@ function Dashboard() {
             Contacts
           </Link>
 
+          <Link
+            to="/my-toasters"
+            className="hidden sm:inline hover:text-indigo-600"
+          >
+            Toasters
+          </Link>
+
           <span className="hidden sm:inline text-gray-300">|</span>
 
           <span className="hidden sm:inline text-gray-700">
@@ -91,6 +98,9 @@ function Dashboard() {
         </Link>
         <Link to="/contacts" className="text-indigo-600 font-medium">
           Contacts
+        </Link>
+        <Link to="/my-toasters" className="text-indigo-600 font-medium">
+          Toasters
         </Link>
       </div>
 

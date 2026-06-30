@@ -7,6 +7,8 @@ import CreatePopup from "./pages/CreatePopup";
 import MyPopups from "./pages/MyPopups";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Contacts from "./pages/Contacts";
+import CreateToaster from "./pages/CreateToaster";
+import MyToasters from "./pages/MyToasters";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +52,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Contacts />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/create-toaster",
+    element: (
+      <ProtectedRoute>
+        <CreateToaster />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/my-toasters",
+    element: (
+      <ProtectedRoute>
+        <MyToasters />
       </ProtectedRoute>
     ),
   },
