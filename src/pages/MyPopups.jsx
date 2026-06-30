@@ -6,25 +6,40 @@ function MyPopups() {
   const [popups, setPopups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [codeFor, setCodeFor] = useState(null); // which popup's code is currently shown
+  const [siteId, setSiteId] = useState(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    fetchPopups();
+    fetchData();
   }, []);
 
-  async function fetchPopups() {
+  async function fetchData() {
     try {
       const token = localStorage.getItem("token");
-      const response = await api.get("/popups", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setPopups(response.data.popups);
+
+      const [popupsRes, meRes] = await Promise.all([
+        api.get("/popups", { headers: { Authorization: `Bearer ${token}` } }),
+        api.get("/me", { headers: { Authorization: `Bearer ${token}` } }),
+      ]);
+
+      setPopups(popupsRes.data.popups);
+      setSiteId(meRes.data.user.siteId);
     } catch (err) {
-      setError("Failed to load popups.");
+      setError("Failed to load data.");
     } finally {
       setLoading(false);
     }
+  }
+
+  function getEmbedCode() {
+    const apiBase = import.meta.env.VITE_API_URL.replace("/api", "");
+    return `<script src="${apiBase}/embed.js" data-site-id="${siteId}"></script>`;
+  }
+
+  function handleCopy() {
+    navigator.clipboard.writeText(getEmbedCode());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   async function handleDelete(id) {
@@ -40,56 +55,76 @@ function MyPopups() {
       });
       setPopups(popups.filter((popup) => popup.id !== id));
     } catch (err) {
-      alert("Failed to delete popup.", err);
+      alert("Failed to delete popup.");
     }
-  }
-
-  function getEmbedCode(popupId) {
-    const apiBase = import.meta.env.VITE_API_URL.replace("/api", "");
-    return `<script src="${apiBase}/embed.js" data-popup-id="${popupId}"></script>`;
-  }
-
-  function handleCopy(popupId) {
-    navigator.clipboard.writeText(getEmbedCode(popupId));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">
-        Loading your popups...
+        Loading...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 px-6 py-10">
+    <div className="min-h-screen bg-gray-50 px-4 sm:px-6 py-8 sm:py-10">
       <div className="max-w-5xl mx-auto">
+        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold">My Popups</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">My Popups</h1>
             <p className="text-gray-600 text-sm mt-1">
-              Manage all the popups you've created.
+              Manage your popups and grab your install script.
             </p>
           </div>
           <Link
             to="/create-popup"
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm"
           >
             + New Popup
           </Link>
         </div>
 
+        {/* Installation block */}
+        {siteId && (
+          <div className="bg-white border rounded-lg p-5 sm:p-6 mb-8">
+            <h2 className="font-semibold text-gray-900 mb-1">
+              Your install script
+            </h2>
+            <p className="text-sm text-gray-500 mb-3">
+              Paste this once into your website's{" "}
+              <code className="bg-gray-100 px-1 rounded">{"</body>"}</code> tag.
+              All your popups load from it automatically.
+            </p>
+            <div className="bg-gray-900 rounded-lg p-3 mb-3">
+              <code className="text-xs text-green-400 break-all">
+                {getEmbedCode()}
+              </code>
+            </div>
+            <button
+              onClick={handleCopy}
+              className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+            >
+              {copied ? "Copied!" : "Copy install script"}
+            </button>
+          </div>
+        )}
+
         {error && (
-          <div className="bg-red-50 text-red-600 text-sm rounded-lg px-3 py-2 mb-4">
+          <div className="bg-red-50 text-red-600 text-sm rounded-lg px-3 py-2 mb-6">
             {error}
           </div>
         )}
 
+        {/* Popup cards */}
         {popups.length === 0 ? (
-          <div className="bg-white border rounded-lg p-12 text-center text-gray-500">
-            You haven't created any popups yet.
+          <div className="bg-white border rounded-lg p-12 text-center text-gray-500 text-sm">
+            You haven't created any popups yet.{" "}
+            <Link to="/create-popup" className="text-indigo-600 underline">
+              Create your first one
+            </Link>
+            .
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -106,30 +141,7 @@ function MyPopups() {
                   <span>✅ {popup.conversions} conversions</span>
                 </div>
 
-                {codeFor === popup.id && (
-                  <div className="bg-gray-900 rounded-lg p-3 mb-4">
-                    <code className="text-xs text-green-400 break-all">
-                      {getEmbedCode(popup.id)}
-                    </code>
-                    <button
-                      onClick={() => handleCopy(popup.id)}
-                      className="mt-2 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-md hover:bg-indigo-700"
-                    >
-                      {copied ? "Copied!" : "Copy code"}
-                    </button>
-                  </div>
-                )}
-
                 <div className="mt-auto flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setCodeFor(codeFor === popup.id ? null : popup.id)
-                    }
-                    className="flex-1 border rounded-lg py-2 text-sm hover:bg-gray-50"
-                  >
-                    {codeFor === popup.id ? "Hide Code" : "Get Code"}
-                  </button>
                   <button
                     type="button"
                     onClick={() => alert("Edit coming soon!")}
