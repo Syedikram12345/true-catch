@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Contacts from "./pages/Contacts";
 import CreateToaster from "./pages/CreateToaster";
 import MyToasters from "./pages/MyToasters";
+import Upgrade from "./pages/Upgrade";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <MyToasters />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/upgrade",
+    element: (
+      <ProtectedRoute>
+        <Upgrade />
       </ProtectedRoute>
     ),
   },

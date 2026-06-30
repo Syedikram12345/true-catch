@@ -12,6 +12,7 @@ function Dashboard() {
   const [siteId, setSiteId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [plan, setPlan] = useState("free");
 
   useEffect(() => {
     fetchAll();
@@ -33,6 +34,7 @@ function Dashboard() {
       setToasters(toastersRes.data.toasters);
       setContacts(contactsRes.data.contacts);
       setSiteId(meRes.data.user.siteId);
+      setPlan(meRes.data.user.plan);
     } catch (err) {
       console.error("Failed to load dashboard data", err);
     } finally {
@@ -158,6 +160,26 @@ function Dashboard() {
                     {getEmbedCode()}
                   </code>
                 </div>
+              </div>
+            )}
+
+            {plan === "free" && (
+              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl p-4 sm:p-5 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <p className="text-white font-semibold">
+                    You're on the Free plan
+                  </p>
+                  <p className="text-indigo-200 text-sm mt-0.5">
+                    Upgrade to Pro for unlimited widgets, contacts, and
+                    analytics.
+                  </p>
+                </div>
+                <Link
+                  to="/upgrade"
+                  className="shrink-0 bg-white text-indigo-600 px-5 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-50"
+                >
+                  Upgrade — ₹199/mo
+                </Link>
               </div>
             )}
 
