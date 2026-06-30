@@ -87,6 +87,12 @@ function Dashboard() {
             Toasters
           </Link>
           <Link
+            to="/analytics"
+            className="hidden sm:inline hover:text-indigo-600"
+          >
+            Analytics
+          </Link>
+          <Link
             to="/contacts"
             className="hidden sm:inline hover:text-indigo-600"
           >
@@ -124,6 +130,12 @@ function Dashboard() {
           className="text-indigo-600 font-medium whitespace-nowrap"
         >
           Toasters
+        </Link>
+        <Link
+          to="/analytics"
+          className="text-indigo-600 font-medium whitespace-nowrap"
+        >
+          Analytics
         </Link>
         <Link
           to="/contacts"

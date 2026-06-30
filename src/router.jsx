@@ -11,6 +11,7 @@ import CreateToaster from "./pages/CreateToaster";
 import MyToasters from "./pages/MyToasters";
 import Upgrade from "./pages/Upgrade";
 import Profile from "./pages/Profile";
+import Analytics from "./pages/Analytics";
 
 const router = createBrowserRouter([
   {
@@ -86,6 +87,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Profile />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/analytics",
+    element: (
+      <ProtectedRoute>
+        <Analytics />
       </ProtectedRoute>
     ),
   },
