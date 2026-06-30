@@ -31,7 +31,6 @@ function Upgrade() {
     try {
       const token = localStorage.getItem("token");
 
-      // Step 1: Create Razorpay order
       const orderRes = await api.post(
         "/payment/create-order",
         {},
@@ -40,7 +39,6 @@ function Upgrade() {
 
       const { orderId, amount, currency } = orderRes.data;
 
-      // Step 2: Open Razorpay checkout
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount,
@@ -49,7 +47,6 @@ function Upgrade() {
         description: "Pro Plan — ₹199/month",
         order_id: orderId,
         handler: async function (response) {
-          // Step 3: Verify payment on our backend
           try {
             await api.post(
               "/payment/verify",
@@ -87,8 +84,9 @@ function Upgrade() {
   const isPro = user?.plan === "pro";
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+      <div className="max-w-lg w-full">
+        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Upgrade to Pro
@@ -96,6 +94,23 @@ function Upgrade() {
           <p className="text-gray-500">
             Unlock unlimited widgets, contacts, analytics, and no branding.
           </p>
+        </div>
+
+        {/* Currency display */}
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="bg-white border rounded-lg px-4 py-2 text-center">
+            <p className="text-xs text-gray-400 mb-0.5">India (INR)</p>
+            <p className="text-xl font-bold text-gray-900">
+              ₹199<span className="text-sm font-normal text-gray-500">/mo</span>
+            </p>
+          </div>
+          <span className="text-gray-400 text-sm">≈</span>
+          <div className="bg-white border rounded-lg px-4 py-2 text-center">
+            <p className="text-xs text-gray-400 mb-0.5">International (USD)</p>
+            <p className="text-xl font-bold text-gray-900">
+              $2.4<span className="text-sm font-normal text-gray-500">/mo</span>
+            </p>
+          </div>
         </div>
 
         {/* Plan comparison */}
@@ -110,15 +125,17 @@ function Upgrade() {
                 <li>✅ 100 contacts</li>
                 <li>✅ Email notifications</li>
                 <li>❌ Analytics</li>
-                <li>❌ No branding</li>
+                <li>❌ Remove branding</li>
                 <li>❌ Unlimited widgets</li>
               </ul>
-              <p className="mt-4 font-bold text-gray-900">Free</p>
+              <p className="mt-5 font-bold text-gray-900">Free forever</p>
             </div>
 
             {/* Pro */}
             <div className="p-5 bg-indigo-50">
-              <p className="text-sm font-semibold text-indigo-600 mb-3">Pro</p>
+              <p className="text-sm font-semibold text-indigo-600 mb-3">
+                Pro ⚡
+              </p>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li>✅ Unlimited popups</li>
                 <li>✅ Unlimited toasters</li>
@@ -128,9 +145,33 @@ function Upgrade() {
                 <li>✅ No "Powered by" branding</li>
                 <li>✅ All future widgets</li>
               </ul>
-              <p className="mt-4 font-bold text-indigo-700">₹199/month</p>
+              <div className="mt-5">
+                <p className="font-bold text-indigo-700">
+                  ₹199<span className="text-sm font-normal">/month</span>
+                </p>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  ~$2.4 USD · Billed monthly
+                </p>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Payment methods */}
+        <div className="flex items-center justify-center gap-2 mb-5">
+          <span className="text-xs text-gray-400">Accepted:</span>
+          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+            UPI
+          </span>
+          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+            Cards
+          </span>
+          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+            Net Banking
+          </span>
+          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+            Wallets
+          </span>
         </div>
 
         {error && (
@@ -147,14 +188,16 @@ function Upgrade() {
           <button
             onClick={handleUpgrade}
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 text-lg"
+            className="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 text-lg"
           >
-            {loading ? "Opening payment..." : "Upgrade for ₹199/month"}
+            {loading
+              ? "Opening payment..."
+              : "Upgrade — ₹199/month (~$2.4 USD)"}
           </button>
         )}
 
         <p className="text-xs text-center text-gray-400 mt-4">
-          Powered by Razorpay · UPI, Cards, Net Banking accepted
+          Secured by Razorpay · Cancel anytime
         </p>
       </div>
     </div>
