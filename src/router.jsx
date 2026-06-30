@@ -10,6 +10,7 @@ import Contacts from "./pages/Contacts";
 import CreateToaster from "./pages/CreateToaster";
 import MyToasters from "./pages/MyToasters";
 import Upgrade from "./pages/Upgrade";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Upgrade />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/profile",
+    element: (
+      <ProtectedRoute>
+        <Profile />
       </ProtectedRoute>
     ),
   },

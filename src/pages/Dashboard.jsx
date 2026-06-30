@@ -92,6 +92,12 @@ function Dashboard() {
           >
             Contacts
           </Link>
+          <Link
+            to="/profile"
+            className="hidden sm:inline hover:text-indigo-600"
+          >
+            Profile
+          </Link>
           <span className="hidden sm:inline text-gray-300">|</span>
           <span className="hidden sm:inline text-gray-700">
             Hi, <span className="font-medium">{user?.name || "there"}</span>
@@ -124,6 +130,12 @@ function Dashboard() {
           className="text-indigo-600 font-medium whitespace-nowrap"
         >
           Contacts
+        </Link>
+        <Link
+          to="/profile"
+          className="text-indigo-600 font-medium whitespace-nowrap"
+        >
+          Profile
         </Link>
       </div>
 
