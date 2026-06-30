@@ -32,9 +32,13 @@ function CreateToaster() {
       });
       navigate("/my-toasters");
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to create toaster.");
-    } finally {
-      setLoading(false);
+      if (err.response?.data?.limitReached) {
+        setError(
+          "You've reached the free plan limit of 1 toaster. Upgrade to Pro for unlimited toasters.",
+        );
+      } else {
+        setError(err.response?.data?.error || "Failed to create toaster.");
+      }
     }
   }
 

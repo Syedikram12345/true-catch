@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../api";
 
 function CreatePopup() {
@@ -42,8 +43,13 @@ function CreatePopup() {
 
       navigate("/my-popups");
     } catch (err) {
-      const message = err.response?.data?.error || "Failed to create popup.";
-      setError(message);
+      if (err.response?.data?.limitReached) {
+        setError(
+          "You've reached the free plan limit of 3 popups. Upgrade to Pro for unlimited popups.",
+        );
+      } else {
+        setError(err.response?.data?.error || "Failed to create popup.");
+      }
     } finally {
       setLoading(false);
     }
@@ -58,8 +64,16 @@ function CreatePopup() {
         </p>
 
         {error && (
-          <div className="bg-red-50 text-red-600 text-sm rounded-lg px-3 py-2 mb-4">
-            {error}
+          <div className="bg-red-50 text-red-600 text-sm rounded-lg px-3 py-2 mb-4 flex items-center justify-between">
+            <span>{error}</span>
+            {error.includes("limit") && (
+              <Link
+                to="/upgrade"
+                className="ml-3 shrink-0 bg-indigo-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-indigo-700"
+              >
+                Upgrade →
+              </Link>
+            )}
           </div>
         )}
 
