@@ -187,6 +187,40 @@ function Dashboard() {
               </div>
             )}
 
+            {/* SDK Usage */}
+            <div className="bg-white border rounded-lg p-5 sm:p-6 mb-8">
+              <h2 className="font-semibold text-gray-900 mb-1">
+                Event Tracking SDK
+              </h2>
+              <p className="text-sm text-gray-500 mb-4">
+                After adding the install script, you can track any custom event
+                from your website's JavaScript:
+              </p>
+              <div className="space-y-3">
+                <div className="bg-gray-900 rounded-lg px-4 py-3">
+                  <code className="text-xs text-green-400">
+                    {`// Track any custom event`}
+                    <br />
+                    {`TrueCatch.track("clicked_pricing", { plan: "pro" })`}
+                  </code>
+                </div>
+                <div className="bg-gray-900 rounded-lg px-4 py-3">
+                  <code className="text-xs text-green-400">
+                    {`// Identify a logged-in user`}
+                    <br />
+                    {`TrueCatch.identify("user@example.com", { name: "John" })`}
+                  </code>
+                </div>
+                <div className="bg-gray-900 rounded-lg px-4 py-3">
+                  <code className="text-xs text-green-400">
+                    {`// Page views are tracked automatically`}
+                    <br />
+                    {`// TrueCatch.page() is called on every load`}
+                  </code>
+                </div>
+              </div>
+            </div>
+
             {plan === "free" && (
               <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl p-4 sm:p-5 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
