@@ -34,8 +34,12 @@ function Contacts() {
   function getEventIcon(type) {
     if (type.includes("popup")) return "🪟";
     if (type.includes("toaster")) return "🍞";
-    if (type.includes("page")) return "📄";
+    if (type.includes("page_view")) return "📄";
     if (type.includes("identify")) return "👤";
+    if (type.includes("cart")) return "🛒";
+    if (type.includes("video")) return "🎥";
+    if (type.includes("pricing")) return "💰";
+    if (type.includes("click")) return "👆";
     return "⚡";
   }
 
@@ -119,7 +123,11 @@ function Contacts() {
                           </span>
                           {contact.device && (
                             <span className="text-xs text-gray-400">
-                              {contact.device === "mobile" ? "📱" : "💻"}{" "}
+                              {contact.device === "mobile"
+                                ? "📱"
+                                : contact.device === "tablet"
+                                  ? "📟"
+                                  : "💻"}{" "}
                               {contact.device}
                             </span>
                           )}
@@ -131,6 +139,17 @@ function Contacts() {
                           {contact.os && (
                             <span className="text-xs text-gray-400">
                               🖥 {contact.os}
+                            </span>
+                          )}
+                          {(contact.city || contact.country) && (
+                            <span className="text-xs text-gray-400">
+                              📍 {contact.city ? `${contact.city}, ` : ""}
+                              {contact.country}
+                            </span>
+                          )}
+                          {contact.pageUrl && (
+                            <span className="text-xs text-gray-400 max-w-xs truncate">
+                              🔗 {contact.pageUrl}
                             </span>
                           )}
                           <span className="text-xs text-gray-400">
